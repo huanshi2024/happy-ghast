@@ -51,10 +51,54 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
     
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
     <title>Happy Ghast | The Ultimate Block Building Adventure Game</title>
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    
+    <!-- Additional Google Analytics Event Tracking -->
+    <script>
+      // Track page engagement times
+      let startTime = new Date().getTime();
+      
+      // Track when user leaves the page
+      window.addEventListener('beforeunload', function() {
+        const timeSpent = new Date().getTime() - startTime;
+        gtag('event', 'time_on_page', {
+          'event_category': 'Engagement',
+          'event_label': 'Time spent on page',
+          'value': Math.round(timeSpent / 1000)
+        });
+      });
+      
+      // Track scroll depth
+      let maxScroll = 0;
+      window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = Math.round((scrollTop / scrollHeight) * 100);
+        
+        if (scrollPercent > maxScroll) {
+          maxScroll = scrollPercent;
+          if (maxScroll % 25 === 0) { // Track at 25%, 50%, 75%, 100%
+            gtag('event', 'scroll_depth', {
+              'event_category': 'Engagement',
+              'event_label': 'Scroll Depth',
+              'value': maxScroll
+            });
+          }
+        }
+      });
+    </script>
   </body>
 </html>
